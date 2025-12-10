@@ -27,7 +27,6 @@ public class Main {
 
         try (Connection connection = DriverManager.getConnection(jdbcUrl, dbUser, dbPass)) {
 
-
             Scanner scanner = new Scanner(System.in);
             System.out.println("Username:");
             String username = scanner.nextLine().trim();
@@ -58,18 +57,26 @@ public class Main {
                             System.out.println("0) Exit");
                             System.out.print("Choose option: ");
 
-                            int choice = scanner.nextInt();
-                            scanner.nextLine();
+                            String input = scanner.nextLine();
+                            int choice;
+
+                            try {
+                                choice = Integer.parseInt(input);
+                            } catch (NumberFormatException e) {
+                                System.out.println("Invalid input – please enter a number.");
+                                continue;
+                            }
+
 
                             switch (choice) {
                                 case 1: {
-                                    String listSql = "select spacecraft from moon_mission";
-                                    try (PreparedStatement listPs = connection.prepareStatement(listSql);
-                                         ResultSet listRs = listPs.executeQuery()) {
+                                    String query = "select spacecraft from moon_mission";
+                                    try (PreparedStatement statement = connection.prepareStatement(query);
+                                         ResultSet result = statement.executeQuery()) {
 
                                         System.out.println("\n=== Moon Missions ===");
-                                        while (listRs.next()) {
-                                            String spacecraft = listRs.getString("spacecraft");
+                                        while (result.next()) {
+                                            String spacecraft = result.getString("spacecraft");
                                             System.out.println(spacecraft);
                                         }
                                     } catch (SQLException e) {
@@ -78,11 +85,69 @@ public class Main {
                                     break;
                                 }
                                 case 2: {
-                                    System.out.println("Get missions - TODO");
+                                    System.out.println("mission_id: ");;
+                                    String missionIdInput = scanner.nextLine();
+                                    int missionId;
+
+                                    try {
+                                        missionId = Integer.parseInt(missionIdInput);
+                                    } catch (NumberFormatException e) {
+                                        System.out.println("Invalid mission ID – please enter a number.");
+                                        break;
+                                    }
+
+
+                                    String query = "select * from moon_mission where mission_id = ?";
+                                    try (PreparedStatement statement = connection.prepareStatement(query)) {
+                                        statement.setInt(1, missionId);
+
+                                        try (ResultSet result = statement.executeQuery()) {
+                                            if (result.next()) {
+                                                System.out.println("\n=== Mission Details ===");
+                                                System.out.println("Mission ID: " + result.getInt("mission_id"));
+                                                System.out.println("Spacecraft: " + result.getString("spacecraft"));
+                                                System.out.println("Launch Date: " + result.getDate("launch_date"));
+                                                System.out.println("Carrier Rocket: " + result.getString("carrier_rocket"));
+                                                System.out.println("Operator: " + result.getString("operator"));
+                                                System.out.println("Mission Type: " + result.getString("mission_type"));
+                                                System.out.println("Outcome: " + result.getString("outcome"));
+                                            } else {
+                                                System.out.println("No mission found with ID: " + missionId);
+                                            }
+                                        }
+                                    } catch (SQLException e) {
+                                        System.out.println("Error getting mission: " + e.getMessage());
+                                    }
                                     break;
                                 }
                                 case 3: {
-                                    System.out.println("Count missions - TODO");
+                                    System.out.println("Enter a year: ");
+                                    String yearInput = scanner.nextLine();
+                                    int missionYear;
+
+                                    try {
+                                        missionYear = Integer.parseInt(yearInput);
+                                    } catch (NumberFormatException e) {
+                                        System.out.println("Invalid year – please enter a number.");
+                                        break;
+                                    }
+
+
+                                    String query = "select count(*) as count from moon_mission where year(launch_date) = ?";
+                                    try (PreparedStatement statement = connection.prepareStatement(query)) {
+                                        statement.setInt(1, missionYear);
+
+                                        try (ResultSet result = statement.executeQuery()) {
+                                            if (result.next()) {
+                                                int count = result.getInt("count");
+                                                System.out.println("Number of missions in " + missionYear + ": " + count);
+                                            } else {
+                                                System.out.println("No missions found in " + missionYear);
+                                            }
+                                        }
+                                    } catch (SQLException e) {
+                                        System.out.println("Error getting mission: " + e.getMessage());
+                                    }
                                     break;
                                 }
                                 case 4: {
@@ -116,13 +181,12 @@ public class Main {
                         System.out.println("0) Exit");
                         System.out.println("Choose option: ");
                         int choice = scanner.nextInt();
-                        scanner.close();
                         return;
                     }
                 }
             }
 
-            scanner.close();
+
 
 
         } catch (SQLException e) {
