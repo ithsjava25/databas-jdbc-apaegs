@@ -111,8 +111,6 @@ public class Main {
                         System.out.println("Invalid username or password");
                         System.out.println("0) Exit");
                         System.out.println("Choose option: ");
-                        int choice = scanner.nextInt();
-                        return;
                     }
                 }
             }
