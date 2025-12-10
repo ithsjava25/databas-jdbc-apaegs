@@ -63,7 +63,18 @@ public class Main {
 
                             switch (choice) {
                                 case 1: {
-                                    System.out.println("List missions - TODO");
+                                    String listSql = "select spacecraft from moon_mission";
+                                    try (PreparedStatement listPs = connection.prepareStatement(listSql);
+                                         ResultSet listRs = listPs.executeQuery()) {
+
+                                        System.out.println("\n=== Moon Missions ===");
+                                        while (listRs.next()) {
+                                            String spacecraft = listRs.getString("spacecraft");
+                                            System.out.println(spacecraft);
+                                        }
+                                    } catch (SQLException e) {
+                                        System.out.println("Error listing missions: " + e.getMessage());
+                                    }
                                     break;
                                 }
                                 case 2: {
