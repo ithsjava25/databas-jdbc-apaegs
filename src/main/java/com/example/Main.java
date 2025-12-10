@@ -43,6 +43,61 @@ public class Main {
                     if (rs.next()) {
                         // Successful login
                         System.out.println("Login successful!");
+
+
+                        // MENU LOOP
+                        boolean running = true;
+                        while (running) {
+                            System.out.println("\n=== Menu ===");
+                            System.out.println("1) List moon missions");
+                            System.out.println("2) Get a moon mission by mission_id");
+                            System.out.println("3) Count missions for a given year");
+                            System.out.println("4) Create an account");
+                            System.out.println("5) Update an account password");
+                            System.out.println("6) Delete an account");
+                            System.out.println("0) Exit");
+                            System.out.print("Choose option: ");
+
+                            int choice = scanner.nextInt();
+                            scanner.nextLine();
+
+                            switch (choice) {
+                                case 1: {
+                                    System.out.println("List missions - TODO");
+                                    break;
+                                }
+                                case 2: {
+                                    System.out.println("Get missions - TODO");
+                                    break;
+                                }
+                                case 3: {
+                                    System.out.println("Count missions - TODO");
+                                    break;
+                                }
+                                case 4: {
+                                    System.out.println("Create account - TODO");
+                                    break;
+                                }
+                                case 5: {
+                                    System.out.println("Update password - TODO");
+                                    break;
+                                }
+                                case 6: {
+                                    System.out.println("Delete account - TODO");
+                                    break;
+                                }
+                                case 0: {
+                                    System.out.println("Goodbye!");
+                                    running = false;
+                                    break;
+                                }
+                                default: {
+                                    System.out.println("Invalid option, try again.");
+                                }
+                            }
+                        }
+
+
                     }
                     else {
                         // Failed login
