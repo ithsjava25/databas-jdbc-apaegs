@@ -13,6 +13,9 @@ public class Main {
         new Main().run();
     }
 
+    /**
+     * Runs the application with login and menu.
+     */
     public void run() {
         // Resolve DB settings with precedence: System properties -> Environment variables
         String jdbcUrl = resolveConfig("APP_JDBC_URL", "APP_JDBC_URL");
@@ -89,7 +92,7 @@ public class Main {
                                     break;
                                 }
                                 case 6: {
-                                    System.out.println("Delete account - TODO");
+                                    deleteAccount(scanner, connection);
                                     break;
                                 }
                                 case 0: {
@@ -102,8 +105,6 @@ public class Main {
                                 }
                             }
                         }
-
-
                     }
                     else {
                         // Failed login
@@ -116,18 +117,42 @@ public class Main {
                 }
             }
 
-
-
-
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
-
-
-
-
     }
 
+
+    /**
+     * Delete an account.
+     */
+    private static void deleteAccount(Scanner scanner, Connection connection) {
+        System.out.print("user_id: ");
+        String userIdInput = scanner.nextLine().trim();
+
+        try {
+            long userId = Long.parseLong(userIdInput);
+
+            String deleteQuery = "DELETE FROM account WHERE user_id = ?";
+            try (PreparedStatement statement = connection.prepareStatement(deleteQuery)) {
+                statement.setLong(1, userId);
+                int rowsAffected = statement.executeUpdate();
+                if (rowsAffected > 0) {
+                    System.out.println("Account deleted successfully!");
+                } else {
+                    System.out.println("No account found with user_id: " + userId);
+                }
+            }
+        } catch (NumberFormatException e) {
+            System.out.println("Invalid user ID format: " + userIdInput);
+        } catch (SQLException e) {
+            System.out.println("Error deleting account: " + e.getMessage());
+        }
+    }
+
+    /**
+     * Update the password for an existing user.
+     */
     private static void updatePassword(Scanner scanner, Connection connection) throws SQLException {
         System.out.print("Enter user_id: ");
         String user_id = scanner.nextLine().trim();
@@ -160,6 +185,9 @@ public class Main {
         }
     }
 
+    /**
+     * Create a new account.
+     */
     private static void createAccount(Scanner scanner, Connection connection) {
         System.out.print("First name: ");
         String firstName = scanner.nextLine().trim();
@@ -192,6 +220,9 @@ public class Main {
     }
     }
 
+    /**
+     * Count moon missions by a given year.
+     */
     private static void countMissionsByYear(Scanner scanner, Connection connection) {
         System.out.print("Enter a year: ");
         String yearInput = scanner.nextLine();
@@ -220,6 +251,9 @@ public class Main {
         }
     }
 
+    /**
+     * Get moon mission details by id.
+     */
     private static void getMoonMissionById(Scanner scanner, Connection connection) {
         System.out.print("mission_id: ");
         String missionIdInput = scanner.nextLine();
@@ -254,6 +288,9 @@ public class Main {
         }
     }
 
+    /**
+     * List all the moon missions.
+     */
     private static void listMoonMissions(Connection connection) {
         String query = "select spacecraft from moon_mission";
         try (PreparedStatement statement = connection.prepareStatement(query);
