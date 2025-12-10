@@ -85,7 +85,7 @@ public class Main {
                                     break;
                                 }
                                 case 5: {
-                                    System.out.println("Update password - TODO");
+                                    updatePassword(scanner, connection);
                                     break;
                                 }
                                 case 6: {
@@ -128,14 +128,46 @@ public class Main {
 
     }
 
+    private static void updatePassword(Scanner scanner, Connection connection) throws SQLException {
+        System.out.print("Enter user_id: ");
+        String user_id = scanner.nextLine().trim();
+        System.out.print("Enter a new password: ");
+        String newPassword = scanner.nextLine().trim();
+
+        if (newPassword.isEmpty()) {
+            System.out.println("Password cannot be empty.");
+            return;
+        }
+
+        try {
+            long userId = Long.parseLong(user_id);
+            String query = "update account set password = ? where user_id = ?";
+
+            try (PreparedStatement statement = connection.prepareStatement(query)) {
+                statement.setString(1, newPassword);
+                statement.setLong(2,userId);
+
+                int rowsAffected = statement.executeUpdate();
+                if (rowsAffected > 0) {
+                    System.out.println("Password updated successfully!");
+                } else {
+                    System.out.println("No account found with user_id: " + userId);
+                }
+            }
+
+        } catch (NumberFormatException e) {
+            System.out.println("Invalid user ID: " + user_id);
+        }
+    }
+
     private static void createAccount(Scanner scanner, Connection connection) {
-        System.out.println("First name: ");
+        System.out.print("First name: ");
         String firstName = scanner.nextLine().trim();
-        System.out.println("Last name: ");
+        System.out.print("Last name: ");
         String lastName = scanner.nextLine().trim();
-        System.out.println("SSN: ");
+        System.out.print("SSN: ");
         String ssn = scanner.nextLine().trim();
-        System.out.println("Password: ");
+        System.out.print("Password: ");
         String password = scanner.nextLine().trim();
 
         String username = firstName.substring(0, Math.min(3, firstName.length())) +
@@ -161,17 +193,15 @@ public class Main {
     }
 
     private static void countMissionsByYear(Scanner scanner, Connection connection) {
-        System.out.println("Enter a year: ");
+        System.out.print("Enter a year: ");
         String yearInput = scanner.nextLine();
         int missionYear;
-
         try {
             missionYear = Integer.parseInt(yearInput);
         } catch (NumberFormatException e) {
             System.out.println("Invalid year – please enter a number.");
             return;
         }
-
 
         String query = "select count(*) as count from moon_mission where year(launch_date) = ?";
         try (PreparedStatement statement = connection.prepareStatement(query)) {
@@ -191,17 +221,15 @@ public class Main {
     }
 
     private static void getMoonMissionById(Scanner scanner, Connection connection) {
-        System.out.println("mission_id: ");
+        System.out.print("mission_id: ");
         String missionIdInput = scanner.nextLine();
         int missionId;
-
         try {
             missionId = Integer.parseInt(missionIdInput);
         } catch (NumberFormatException e) {
             System.out.println("Invalid mission ID – please enter a number.");
             return;
         }
-
 
         String query = "select * from moon_mission where mission_id = ?";
         try (PreparedStatement statement = connection.prepareStatement(query)) {
