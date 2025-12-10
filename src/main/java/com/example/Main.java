@@ -1,9 +1,8 @@
 package com.example;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.Arrays;
+import java.util.Scanner;
 
 public class Main {
 
@@ -27,10 +26,46 @@ public class Main {
         }
 
         try (Connection connection = DriverManager.getConnection(jdbcUrl, dbUser, dbPass)) {
+
+
+            Scanner scanner = new Scanner(System.in);
+            System.out.println("Username:");
+            String username = scanner.nextLine().trim();
+            System.out.println("Password:");
+            String password = scanner.nextLine().trim();
+
+            String sql = "select * from account where name = ? and password = ?";
+            try (PreparedStatement ps = connection.prepareStatement(sql)) {
+                ps.setString(1, username);
+                ps.setString(2, password);
+
+                try (ResultSet rs = ps.executeQuery()) {
+                    if (rs.next()) {
+                        // Successful login
+                        System.out.println("Login successful!");
+                    }
+                    else {
+                        // Failed login
+                        System.out.println("Invalid username or password");
+                        System.out.println("0) Exit");
+                        System.out.println("Choose option: ");
+                        int choice = scanner.nextInt();
+                        scanner.close();
+                        return;
+                    }
+                }
+            }
+
+            scanner.close();
+
+
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
-        //Todo: Starting point for your code
+
+
+
+
     }
 
     /**
