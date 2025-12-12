@@ -153,15 +153,9 @@ public class Main {
      * Update the password for an existing user.
      */
     private static void updatePassword(Scanner scanner, Connection connection) throws SQLException {
-        System.out.print("Enter user_id: ");
-        String user_id = scanner.nextLine().trim();
-        System.out.print("Enter a new password: ");
-        String newPassword = scanner.nextLine().trim();
 
-        if (newPassword.isEmpty()) {
-            System.out.println("Password cannot be empty.");
-            return;
-        }
+        String user_id = checkNonEmptyInput(scanner, "Enter user_id");
+        String newPassword = checkNonEmptyInput(scanner, "Enter a new password");
 
         try {
             long userId = Long.parseLong(user_id);
