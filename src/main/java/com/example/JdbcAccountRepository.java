@@ -8,7 +8,6 @@ import java.sql.SQLException;
 /**
  * JDBC implementation of AccountRepository
  */
-
 public class JdbcAccountRepository implements AccountRepository {
 
     private final SimpleDataSource dataSource;
