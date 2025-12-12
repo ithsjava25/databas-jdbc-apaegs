@@ -31,9 +31,9 @@ public class Main {
         try (Connection connection = DriverManager.getConnection(jdbcUrl, dbUser, dbPass)) {
 
             Scanner scanner = new Scanner(System.in);
-            System.out.println("Username:");
+            System.out.print("Username:");
             String username_ = scanner.nextLine().trim();
-            System.out.println("Password:");
+            System.out.print("Password:");
             String password_ = scanner.nextLine().trim();
 
             String sql = "select * from account where name = ? and password = ?";
@@ -111,6 +111,7 @@ public class Main {
                         System.out.println("Invalid username or password");
                         System.out.println("0) Exit");
                         System.out.println("Choose option: ");
+                        String input = scanner.nextLine();
                     }
                 }
             }
@@ -187,14 +188,11 @@ public class Main {
      * Create a new account.
      */
     private static void createAccount(Scanner scanner, Connection connection) {
-        System.out.print("First name: ");
-        String firstName = scanner.nextLine().trim();
-        System.out.print("Last name: ");
-        String lastName = scanner.nextLine().trim();
-        System.out.print("SSN: ");
-        String ssn = scanner.nextLine().trim();
-        System.out.print("Password: ");
-        String password = scanner.nextLine().trim();
+
+        String firstName = checkNonEmptyInput(scanner, "First name");
+        String lastName = checkNonEmptyInput(scanner, "Last name");
+        String ssn = checkNonEmptyInput(scanner, "SSN");
+        String password = checkNonEmptyInput(scanner, "Password");
 
         String username = firstName.substring(0, Math.min(3, firstName.length())) +
                 lastName.substring(0, Math.min(3, lastName.length()));
@@ -217,6 +215,23 @@ public class Main {
         System.out.println("Error creating account: " + e.getMessage());
     }
     }
+
+    /**
+     * Method checking for non-empty String input
+     */
+    private static String checkNonEmptyInput(Scanner scanner, String prompt) {
+        while (true) {
+            System.out.print(prompt + ": ");
+            String input = scanner.nextLine().trim();
+
+            if (input.isEmpty()) {
+                System.out.println(prompt + " cannot be empty.");
+            } else {
+                return input;
+            }
+        }
+    }
+
 
     /**
      * Count moon missions by a given year.
