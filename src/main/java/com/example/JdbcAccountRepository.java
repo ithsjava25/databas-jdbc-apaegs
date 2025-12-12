@@ -1,0 +1,103 @@
+package com.example;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
+/**
+ * JDBC implementation of AccountRepository
+ */
+
+public class JdbcAccountRepository implements AccountRepository {
+
+    private final SimpleDataSource dataSource;
+
+    public JdbcAccountRepository(SimpleDataSource dataSource) {
+        this.dataSource = dataSource;
+    }
+
+
+    @Override
+    public boolean validateLogin(String username, String password) {
+        String sql = "SELECT * FROM account WHERE name = ? AND password = ?";
+
+        try (Connection conn = dataSource.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            ps.setString(1, username);
+            ps.setString(2, password);
+
+            try (ResultSet rs = ps.executeQuery()) {
+                return rs.next(); // Returns true if user found
+            }
+
+        } catch (SQLException e) {
+            throw new RuntimeException("Error validating login", e);
+        }
+    }
+
+    @Override
+    public String createAccount(String firstName, String lastName, String ssn, String password) {
+        // Generate username
+        String username = firstName.substring(0, Math.min(3, firstName.length())) +
+                lastName.substring(0, Math.min(3, lastName.length()));
+
+        String sql = "INSERT INTO account (name, first_name, last_name, ssn, password) VALUES (?, ?, ?, ?, ?)";
+
+        try (Connection conn = dataSource.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            ps.setString(1, username);
+            ps.setString(2, firstName);
+            ps.setString(3, lastName);
+            ps.setString(4, ssn);
+            ps.setString(5, password);
+
+            int rowsAffected = ps.executeUpdate();
+            if (rowsAffected > 0) {
+                return username;
+            } else {
+                throw new RuntimeException("Failed to create account");
+            }
+
+        } catch (SQLException e) {
+            throw new RuntimeException("Error creating account", e);
+        }
+    }
+
+    @Override
+    public boolean updatePassword(long userId, String newPassword) {
+        String sql = "UPDATE account SET password = ? WHERE user_id = ?";
+
+        try (Connection conn = dataSource.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            ps.setString(1, newPassword);
+            ps.setLong(2, userId);
+
+            int rowsAffected = ps.executeUpdate();
+            return rowsAffected > 0;
+
+        } catch (SQLException e) {
+            throw new RuntimeException("Error updating password", e);
+        }
+    }
+
+    @Override
+    public boolean deleteAccount(long userId) {
+        String sql = "DELETE FROM account WHERE user_id = ?";
+
+        try (Connection conn = dataSource.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            ps.setLong(1, userId);
+
+            int rowsAffected = ps.executeUpdate();
+            return rowsAffected > 0;
+
+        } catch (SQLException e) {
+            throw new RuntimeException("Error deleting account", e);
+        }
+    }
+}

@@ -6,7 +6,7 @@ public class MoonMission {
 
     private Integer missionId;
     private String spacecraft;
-    private Date launceDate;
+    private Date launchDate;
     private String carrierRocket;
     private String operator;
     private String missionType;
@@ -14,10 +14,10 @@ public class MoonMission {
 
     public MoonMission() {}
 
-    public MoonMission(Integer missionId, String spacecraft, Date launceDate, String carrierRocket, String operator, String missionType, String outcome) {
+    public MoonMission(Integer missionId, String spacecraft, Date launchDate, String carrierRocket, String operator, String missionType, String outcome) {
         this.missionId = missionId;
         this.spacecraft = spacecraft;
-        this.launceDate = launceDate;
+        this.launchDate = launchDate;
         this.carrierRocket = carrierRocket;
         this.operator = operator;
         this.missionType = missionType;
@@ -40,12 +40,12 @@ public class MoonMission {
         this.spacecraft = spacecraft;
     }
 
-    public Date getLaunceDate() {
-        return launceDate;
+    public Date getLaunchDate() {
+        return launchDate;
     }
 
-    public void setLaunceDate(Date launceDate) {
-        this.launceDate = launceDate;
+    public void setLaunchDate(Date launchDate) {
+        this.launchDate = launchDate;
     }
 
     public String getCarrierRocket() {
