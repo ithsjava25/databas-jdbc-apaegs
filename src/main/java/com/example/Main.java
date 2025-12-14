@@ -45,88 +45,96 @@ public class Main {
         AccountRepository accountRepo = new JdbcAccountRepository(dataSource);
         MoonMissionRepository missionRepo = new JdbcMoonMissionRepository(dataSource);
 
-        Scanner scanner = new Scanner(System.in);
+        Scanner scanner = null;
+        try {
+            scanner = new Scanner(System.in);
 
-        // Login
-        System.out.print("Username: ");
-        String username = scanner.nextLine().trim();
-        System.out.print("Password: ");
-        String password = scanner.nextLine().trim();
+            // Login
+            System.out.print("Username: ");
+            String username = scanner.nextLine().trim();
+            System.out.print("Password: ");
+            String password = scanner.nextLine().trim();
 
-        if (accountRepo.validateLogin(username, password)) {
-            // Successful login
-            System.out.println("Login successful!");
+            if (accountRepo.validateLogin(username, password)) {
+                // Successful login
+                System.out.println("Login successful!");
 
-            // Menu loop
-            boolean running = true;
-            while (running) {
-                System.out.println("\n=== Menu ===");
-                System.out.println("1) List moon missions");
-                System.out.println("2) Get a moon mission by mission_id");
-                System.out.println("3) Count missions for a given year");
-                System.out.println("4) Create an account");
-                System.out.println("5) Update an account password");
-                System.out.println("6) Delete an account");
+                // Menu loop
+                boolean running = true;
+                while (running) {
+                    System.out.println("\n=== Menu ===");
+                    System.out.println("1) List moon missions");
+                    System.out.println("2) Get a moon mission by mission_id");
+                    System.out.println("3) Count missions for a given year");
+                    System.out.println("4) Create an account");
+                    System.out.println("5) Update an account password");
+                    System.out.println("6) Delete an account");
+                    System.out.println("0) Exit");
+                    System.out.print("Choose option: ");
+
+                    String input = scanner.nextLine();
+                    int choice;
+
+                    try {
+                        choice = Integer.parseInt(input);
+                    } catch (NumberFormatException e) {
+                        System.out.println("Invalid input – please enter a number.");
+                        continue;
+                    }
+
+                    switch (choice) {
+                        case 1: {
+                            listMoonMissions(missionRepo);
+                            break;
+                        }
+                        case 2: {
+                            getMoonMissionById(scanner, missionRepo);
+                            break;
+                        }
+                        case 3: {
+                            countMissionsByYear(scanner, missionRepo);
+                            break;
+                        }
+                        case 4: {
+                            createAccount(scanner, accountRepo);
+                            break;
+                        }
+                        case 5: {
+                            updatePassword(scanner, accountRepo);
+                            break;
+                        }
+                        case 6: {
+                            deleteAccount(scanner, accountRepo);
+                            break;
+                        }
+                        case 0: {
+                            System.out.println("Goodbye!");
+                            running = false;
+                            break;
+                        }
+                        default: {
+                            System.out.println("Invalid option, try again.");
+                        }
+                    }
+                }
+            } else {
+                // Failed login
+                System.out.println("Invalid username or password");
                 System.out.println("0) Exit");
                 System.out.print("Choose option: ");
 
                 String input = scanner.nextLine();
-                int choice;
 
-                try {
-                    choice = Integer.parseInt(input);
-                } catch (NumberFormatException e) {
-                    System.out.println("Invalid input – please enter a number.");
-                    continue;
-                }
-
-                switch (choice) {
-                    case 1: {
-                        listMoonMissions(missionRepo);
-                        break;
-                    }
-                    case 2: {
-                        getMoonMissionById(scanner, missionRepo);
-                        break;
-                    }
-                    case 3: {
-                        countMissionsByYear(scanner, missionRepo);
-                        break;
-                    }
-                    case 4: {
-                        createAccount(scanner, accountRepo);
-                        break;
-                    }
-                    case 5: {
-                        updatePassword(scanner, accountRepo);
-                        break;
-                    }
-                    case 6: {
-                        deleteAccount(scanner, accountRepo);
-                        break;
-                    }
-                    case 0: {
-                        System.out.println("Goodbye!");
-                        running = false;
-                        break;
-                    }
-                    default: {
-                        System.out.println("Invalid option, try again.");
-                    }
+                if (input.equals("0")) {
+                    return;
                 }
             }
-        } else {
-            // Failed login
-            System.out.println("Invalid username or password");
-            System.out.println("0) Exit");
-            System.out.print("Choose option: ");
 
-            String input = scanner.nextLine();
-
-            if (input.equals("0")) {
-                System.exit(0);
-            }
+        } catch (Exception e) {
+            throw new RuntimeException(e);
         }
+
+
 
     }
 
