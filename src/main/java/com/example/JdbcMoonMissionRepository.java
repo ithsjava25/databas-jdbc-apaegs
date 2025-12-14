@@ -9,13 +9,19 @@ import java.util.List;
 
 /**
  * JDBC implementation of MoonMissionRepository.
+ * Handles all database operations related to moon missions.
  */
 public class JdbcMoonMissionRepository implements MoonMissionRepository {
 
     private final SimpleDataSource dataSource;
 
+    /**
+     * Creates a new JdbcMoonMissionRepository.
+     *
+     * @param dataSource the data source for database connections
+     */
     public JdbcMoonMissionRepository(SimpleDataSource dataSource) {
-        this.dataSource = dataSource;
+        this.dataSource = java.util.Objects.requireNonNull(dataSource, "dataSource");
     }
 
     @Override

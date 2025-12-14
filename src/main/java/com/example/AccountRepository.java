@@ -7,7 +7,7 @@ public interface AccountRepository {
 
     /**
      * Validate login credentials.
-     * @return if username match, false otherwise
+     * @return if username and password match, false otherwise
      */
     boolean validateLogin(String username, String password);
 

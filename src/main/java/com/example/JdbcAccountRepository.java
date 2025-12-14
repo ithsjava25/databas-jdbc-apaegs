@@ -7,13 +7,20 @@ import java.sql.SQLException;
 
 /**
  * JDBC implementation of AccountRepository
+ * * Handles all database operations related to user accounts.
  */
 public class JdbcAccountRepository implements AccountRepository {
 
     private final SimpleDataSource dataSource;
 
+    /**
+     * Creates a new JdbcAccountRepository.
+     *
+     * @param dataSource the data source for database connections
+     */
     public JdbcAccountRepository(SimpleDataSource dataSource) {
-        this.dataSource = dataSource;
+
+        this.dataSource = java.util.Objects.requireNonNull(dataSource, "dataSource");
     }
 
 
@@ -38,6 +45,21 @@ public class JdbcAccountRepository implements AccountRepository {
 
     @Override
     public String createAccount(String firstName, String lastName, String ssn, String password) {
+
+        // Validate
+        if (firstName == null || firstName.trim().isEmpty()) {
+            throw new IllegalArgumentException("First name cannot be empty!");
+        }
+        if (lastName == null || lastName.trim().isEmpty()) {
+            throw new IllegalArgumentException("Last name cannot be empty!");
+        }
+        if (password == null || password.trim().isEmpty()) {
+            throw new IllegalArgumentException("Password cannot be empty!");
+        }
+        if (ssn == null || ssn.trim().isEmpty()) {
+            throw new IllegalArgumentException("SSN cannot be empty!");
+        }
+
         // Generate username
         String username = firstName.substring(0, Math.min(3, firstName.length())) +
                 lastName.substring(0, Math.min(3, lastName.length()));

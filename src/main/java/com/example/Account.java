@@ -1,5 +1,9 @@
 package com.example;
 
+/**
+ * Represents a user account in the system.
+ * Contains user information including credentials and personal details.
+ */
 public class Account {
     private Long userId;
     private String name;
@@ -10,6 +14,16 @@ public class Account {
 
     public Account() {}
 
+    /**
+     * Creates a new Account with all fields.
+     *
+     * @param userId the unique user identifier
+     * @param name the username
+     * @param firstName the user's first name
+     * @param lastName the user's last name
+     * @param ssn the social security number
+     * @param password the password
+     */
     public Account(Long userId, String name, String firstName, String lastName, String ssn, String password) {
         this.userId = userId;
         this.name = name;

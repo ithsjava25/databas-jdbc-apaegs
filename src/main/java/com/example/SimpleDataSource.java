@@ -13,6 +13,13 @@ public class SimpleDataSource {
     private final String username;
     private final String password;
 
+    /**
+     * Creates a new SimpleDataSource with connection parameters.
+     *
+     * @param url the JDBC URL
+     * @param username the database username
+     * @param password the database password
+     */
     public SimpleDataSource(String url, String username, String password) {
         this.url = url;
         this.username = username;

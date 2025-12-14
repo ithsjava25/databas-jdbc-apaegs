@@ -2,6 +2,9 @@ package com.example;
 
 import java.sql.Date;
 
+/**
+ * Represents a moon mission with details about the spacecraft and mission parameters.
+ */
 public class MoonMission {
 
     private Integer missionId;
@@ -14,6 +17,18 @@ public class MoonMission {
 
     public MoonMission() {}
 
+
+    /**
+     * Creates a new MoonMission with all fields.
+     *
+     * @param missionId the unique mission identifier
+     * @param spacecraft the name of the spacecraft
+     * @param launchDate the date the mission was launched
+     * @param carrierRocket the rocket used to launch the spacecraft
+     * @param operator the organization operating the mission
+     * @param missionType the type of mission
+     * @param outcome the outcome of the mission
+     */
     public MoonMission(Integer missionId, String spacecraft, Date launchDate, String carrierRocket, String operator, String missionType, String outcome) {
         this.missionId = missionId;
         this.spacecraft = spacecraft;
