@@ -15,6 +15,9 @@ public class MoonMission {
     private String missionType;
     private String outcome;
 
+    /**
+     * Default constructor.
+     */
     public MoonMission() {}
 
 

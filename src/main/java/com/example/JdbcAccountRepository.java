@@ -7,7 +7,7 @@ import java.sql.SQLException;
 
 /**
  * JDBC implementation of AccountRepository
- * * Handles all database operations related to user accounts.
+ * Handles all database operations related to user accounts.
  */
 public class JdbcAccountRepository implements AccountRepository {
 

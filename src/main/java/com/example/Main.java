@@ -4,8 +4,17 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
 
+/**
+ * Main application class for the Moon Mission CLI.
+ * Provides a command-line interface for managing moon missions and user accounts.
+ */
 public class Main {
 
+    /**
+     * Application entry point.
+     *
+     * @param args command-line arguments
+     */
     static void main(String[] args) {
         if (isDevMode(args)) {
             DevDatabaseInitializer.start();
@@ -14,7 +23,8 @@ public class Main {
     }
 
     /**
-     * Runs the application with login and menu.
+     * Runs the application with login and menu system.
+     * Initializes database connection, authenticates user, and presents menu options.
      */
     public void run() {
         // Resolve DB settings with precedence: System properties -> Environment variables
@@ -118,7 +128,10 @@ public class Main {
 
 
     /**
-     * Delete an account.
+     * Deletes a user account by user ID.
+     *
+     * @param scanner the Scanner for reading user input
+     * @param accountRepo the account repository
      */
     private static void deleteAccount(Scanner scanner, AccountRepository accountRepo) {
         System.out.print("user_id: ");
@@ -140,7 +153,10 @@ public class Main {
     }
 
     /**
-     * Update the password for an existing user.
+     * Updates the password for an existing user account.
+     *
+     * @param scanner the Scanner for reading user input
+     * @param accountRepo the account repository
      */
     private static void updatePassword(Scanner scanner, AccountRepository accountRepo) {
         System.out.print("Enter user_id: ");
@@ -169,7 +185,11 @@ public class Main {
     }
 
     /**
-     * Create a new account.
+     * Creates a new user account.
+     * Prompts for first name, last name, SSN, and password.
+     *
+     * @param scanner the Scanner for reading user input
+     * @param accountRepo the account repository
      */
     private static void createAccount(Scanner scanner, AccountRepository accountRepo) {
         String firstName = checkNonEmptyInput(scanner, "First name");
@@ -186,7 +206,12 @@ public class Main {
     }
 
     /**
-     * Method checking for non-empty String input
+     * Validates and reads non-empty string input from user.
+     * Continues prompting until a non-empty value is provided.
+     *
+     * @param scanner the Scanner for reading user input
+     * @param prompt the prompt message to display
+     * @return the validated non-empty input string
      */
     private static String checkNonEmptyInput(Scanner scanner, String prompt) {
         while (true) {
@@ -203,7 +228,10 @@ public class Main {
 
 
     /**
-     * Count moon missions by a given year.
+     * Counts and displays the number of moon missions launched in a given year.
+     *
+     * @param scanner the Scanner for reading user input
+     * @param missionRepo the moon mission repository
      */
     private static void countMissionsByYear(Scanner scanner, MoonMissionRepository missionRepo) {
         System.out.print("Enter a year: ");
@@ -220,7 +248,10 @@ public class Main {
     }
 
     /**
-     * Get moon mission details by id.
+     * Retrieves and displays details of a specific moon mission by its ID.
+     *
+     * @param scanner the Scanner for reading user input
+     * @param missionRepo the moon mission repository
      */
     private static void getMoonMissionById(Scanner scanner, MoonMissionRepository missionRepo) {
         System.out.print("mission_id: ");
@@ -249,7 +280,9 @@ public class Main {
     }
 
     /**
-     * List all the moon missions.
+     * Lists all moon mission spacecraft names.
+     *
+     * @param missionRepo the moon mission repository
      */
     private static void listMoonMissions(MoonMissionRepository missionRepo) {
         List<String> spacecrafts = missionRepo.listAllSpacecrafts();

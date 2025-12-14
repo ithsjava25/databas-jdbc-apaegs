@@ -6,6 +6,7 @@ import java.sql.SQLException;
 
 /**
  * Simple DataSource implementation that manages database connections.
+ * Wraps JDBC DriverManager for easy connection management.
  */
 public class SimpleDataSource {
 

@@ -12,6 +12,9 @@ public class Account {
     private String ssn;
     private String password;
 
+    /**
+     * Default constructor.
+     */
     public Account() {}
 
     /**
