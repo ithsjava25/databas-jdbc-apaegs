@@ -120,10 +120,14 @@ public class Main {
             System.out.println("Invalid username or password");
             System.out.println("0) Exit");
             System.out.print("Choose option: ");
+
             String input = scanner.nextLine();
+
+            if (input.equals("0")) {
+                System.exit(0);
+            }
         }
 
-        scanner.close();
     }
 
 
@@ -199,7 +203,7 @@ public class Main {
 
         try {
             String username = accountRepo.createAccount(firstName, lastName, ssn, password);
-            System.out.println("Account created successfully!");
+            System.out.println("Account created successfully! Username: " + username);
         } catch (RuntimeException e) {
             System.out.println("Error creating account: " + e.getMessage());
         }
